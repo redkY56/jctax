@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffffff;
+        }
+        .login-container {
+            background-color: #b2ffb2;
+            padding: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            width: 60%;
+        }
+        .login-box {
+            flex: 1;
+        }
+        .logo {
+            font-size: 50px;
+            font-weight: bold;
+            color: #c49a4a;
+            text-align: center;
+        }
+        .form-control {
+            margin-bottom: 15px;
+            border-radius: 20px;
+        }
+        .btn-login {
+            width: 100%;
+            border-radius: 20px;
+            background-color: #0d6efd;
+            color: white;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container shadow">
+        <div class="login-box">
+            <h2 class="fw-bold">LOGIN</h2>
+            <form id="loginForm">
+                <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
+                <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                <button type="submit" class="btn btn-login">Login</button>
+            </form>
+        </div>
+        <div class="logo">
+            JC
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            // Get input values
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            // Display values (for demonstration, log to console)
+            console.log("Username:", username);
+            console.log("Password:", password);
+
+            // You can replace this with actual authentication logic
+            alert("Login details submitted! (Check console for values)");
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
