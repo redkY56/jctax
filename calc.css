@@ -1,0 +1,87 @@
+:root {
+  --juniata-blue: #002F6C;
+  --juniata-gold: #FFD100;
+  --light-bg: #f9f9f9;
+  --text-color: #222;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: var(--light-bg);
+  color: var(--text-color);
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: var(--juniata-blue);
+  border-bottom: 4px solid var(--juniata-gold);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+h2, h3 {
+  color: var(--juniata-blue);
+}
+
+form {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-left: 6px solid var(--juniata-gold);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: var(--juniata-blue);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #001b3f;
+}
+
+.filled-form {
+  background-color: white;
+  border-left: 6px solid var(--juniata-gold);
+  padding: 20px;
+  margin-top: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+p {
+  line-height: 1.6;
+}
+
+@media (min-width: 600px) {
+  form, .filled-form {
+    max-width: 700px;
+    margin: auto;
+  }
+}
