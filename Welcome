@@ -1,1 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Welcome Page</title>
+  <link rel="stylesheet" href="WelStyle.css"
+</head>
+
+<body>
+
+
+
+  <div class="toolbox">
+      <h1>JC-Tax</h1>
+  </div>
+
+  <div class="side-strip"></div>
+
+  <div class="button-container">
+    <button class="side-button">W2 Forms</button>
+    <button class="side-button">Calculator</button>
+    <button class="side-button">IRS Submission</button>
+  </div>
+
+  <div class="white-box">
+    <p>Welcome to our website! We are happy to have you here.</p>
+    <p>This is a body of text inside the white box. You can add more content here as you like.</p>
+    <p>Feel free to explore and discover more about what we offer.</p>
+
+    <table class="info-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Description</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>W2 Forms</td>
+            <td>Download and view employee tax forms.</td>
+            <td>Available</td>
+          </tr>
+          <tr>
+            <td>Calculator</td>
+            <td>Estimate taxes and deductions.</td>
+            <td>Coming Soon</td>
+          </tr>
+          <tr>
+            <td>IRS Submission</td>
+            <td>Submit forms electronically to the IRS.</td>
+            <td>In Progress</td>
+          </tr>
+        </tbody>
+      </table>
+
+  </div>
+
+
+
+</body>
+
+</html>
 
