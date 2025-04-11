@@ -30,26 +30,30 @@
     <table class="info-table">
         <thead>
           <tr>
-            <th>Feature</th>
-            <th>Description</th>
+            <th>Submission Date</th>
+            <th>Form</th>
             <th>Status</th>
+            <th>Approved Date</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>W2 Forms</td>
-            <td>Download and view employee tax forms.</td>
-            <td>Available</td>
+            <td>4/11/25</td>
+            <td>W2 form</td>
+            <td>In Queue</td>
+            <td>N/A</td>
           </tr>
           <tr>
-            <td>Calculator</td>
-            <td>Estimate taxes and deductions.</td>
-            <td>Coming Soon</td>
+            <td>2/11/24</td>
+            <td>W2 Form</td>
+            <td>Submitted</td>
+            <td>3/1/24</td>
           </tr>
           <tr>
-            <td>IRS Submission</td>
-            <td>Submit forms electronically to the IRS.</td>
-            <td>In Progress</td>
+            <td>2/11/23</td>
+            <td>W2 Form</td>
+            <td>Submitted</td>
+            <td>3/1/23</td>
           </tr>
         </tbody>
       </table>
@@ -61,4 +65,3 @@
 </body>
 
 </html>
-
