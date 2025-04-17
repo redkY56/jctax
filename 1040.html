@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>1040 PDF Filler</title>
+  <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; max-width: 600px; margin: auto; }
+    label { display: block; margin-top: 1rem; }
+    input, select { width: 100%; padding: 0.5rem; margin-top: 0.25rem; }
+    button { margin-top: 1.5rem; padding: 0.75rem 1.5rem; font-size: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Fill IRS Form 1040</h1>
+  <form id="taxForm">
+    <label>
+      Full Name:
+      <input type="text" id="name" required>
+    </label>
+    <label>
+      SSN:
+      <input type="text" id="ssn" required>
+    </label>
+    <label>
+      Filing Status:
+      <select id="filingStatus" required>
+        <option value="Single">Single</option>
+        <option value="Married Filing Jointly">Married Filing Jointly</option>
+        <option value="Married Filing Separately">Married Filing Separately</option>
+        <option value="Head of Household">Head of Household</option>
+      </select>
+    </label>
+    <label>
+      Income:
+      <input type="number" id="income" required>
+    </label>
+    <button type="submit">Fill & Download PDF</button>
+  </form>
+
+  <script>
+    document.getElementById('taxForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const ssn = document.getElementById('ssn').value;
+      const status = document.getElementById('filingStatus').value;
+      const income = document.getElementById('income').value;
+
+      const formUrl = '1040-template.pdf';
+      const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer());
+      const pdfDoc = await PDFLib.PDFDocument.load(formPdfBytes);
+      const form = pdfDoc.getForm();
+
+      // Try populating known fields — use real field names from the PDF
+      try {
+        form.getTextField('topmostSubform[0].Page1[0].f1_01[0]').setText(name);
+        form.getTextField('topmostSubform[0].Page1[0].f1_02[0]').setText(ssn);
+        form.getTextField('topmostSubform[0].Page1[0].f1_08[0]').setText(income.toString());
+
+        // You can map status to checkboxes or dropdowns if field names are known
+        // e.g., form.getCheckBox('single[0]').check();
+
+      } catch (err) {
+        alert("Some fields couldn't be filled. You may need to inspect the PDF for exact field names.");
+        console.error(err);
+      }
+
+      const pdfBytes = await pdfDoc.save();
+
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'filled-1040.pdf';
+      a.click();
+    });
+  </script>
+</body>
+</html>
