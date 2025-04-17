@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1040 Tax Form Generator</title>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://unpkg.com/downloadjs@1.4.7"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-section {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .form-section h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .name-group {
+            display: flex;
+            gap: 15px;
+        }
+        .name-group .form-group {
+            flex: 1;
+        }
+        .address-group {
+            display: flex;
+            gap: 15px;
+        }
+        .address-group .form-group:first-child {
+            flex: 2;
+        }
+        .address-group .form-group {
+            flex: 1;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .required:after {
+            content: " *";
+            color: red;
+        }
+        .two-column {
+            display: flex;
+            gap: 20px;
+        }
+        .two-column > div {
+            flex: 1;
+        }
+        .checkbox-group {
+            margin: 15px 0;
+        }
+        .checkbox-group label {
+            display: inline;
+            font-weight: normal;
+            margin-left: 5px;
+        }
+        @media (max-width: 768px) {
+            .name-group, .address-group, .two-column {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>1040 Tax Form Generator</h1>
+    
+    <form id="taxForm">
+        <!-- Personal Information Section -->
+        <div class="form-section">
+            <h2>Personal Information</h2>
+            
+            <div class="name-group">
+                <div class="form-group">
+                    <label for="firstName" class="required">First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="middleInitial">Middle Initial</label>
+                    <input type="text" id="middleInitial" name="middleInitial" maxlength="1">
+                </div>
+                <div class="form-group">
+                    <label for="lastName" class="required">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="ssn" class="required">Social Security Number</label>
+                <input type="text" id="ssn" name="ssn" pattern="\d{3}-\d{2}-\d{4}" placeholder="XXX-XX-XXXX" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="dob" class="required">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="filingStatus" class="required">Filing Status</label>
+                <select id="filingStatus" name="filingStatus" required>
+                    <option value="">-- Select --</option>
+                    <option value="single">Single</option>
+                    <option value="married_joint">Married Filing Jointly</option>
+                    <option value="married_separate">Married Filing Separately</option>
+                    <option value="head_household">Head of Household</option>
+                    <option value="widower">Qualifying Widow(er)</option>
+                </select>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="spouseFiling" name="spouseFiling">
+                <label for="spouseFiling">Check if your spouse is filing a separate return and you were a dual-status alien</label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="dependent" name="dependent">
+                <label for="dependent">Someone can claim you as a dependent</label>
+            </div>
+        </div>
+        
+        <!-- Address Information -->
+        <div class="form-section">
+            <h2>Address Information</h2>
+            
+            <div class="form-group">
+                <label for="streetAddress" class="required">Street Address</label>
+                <input type="text" id="streetAddress" name="streetAddress" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="aptNumber">Apt, Suite, Unit, etc.</label>
+                <input type="text" id="aptNumber" name="aptNumber">
+            </div>
+            
+            <div class="address-group">
+                <div class="form-group">
+                    <label for="city" class="required">City</label>
+                    <input type="text" id="city" name="city" required>
+                </div>
+                <div class="form-group">
+                    <label for="state" class="required">State</label>
+                    <select id="state" name="state" required>
+                        <option value="">-- Select --</option>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="CA">California</option>
+                        <option value="CO">Colorado</option>
+                        <option value="CT">Connecticut</option>
+                        <option value="DE">Delaware</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="ID">Idaho</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IN">Indiana</option>
+                        <option value="IA">Iowa</option>
+                        <option value="KS">Kansas</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="ME">Maine</option>
+                        <option value="MD">Maryland</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="MI">Michigan</option>
+                        <option value="MN">Minnesota</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="MO">Missouri</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NV">Nevada</option>
+                        <option value="NH">New Hampshire</option>
+                        <option value="NJ">New Jersey</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="NY">New York</option>
+                        <option value="NC">North Carolina</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="OH">Ohio</option>
+                        <option value="OK">Oklahoma</option>
+                        <option value="OR">Oregon</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="RI">Rhode Island</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="SD">South Dakota</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="TX">Texas</option>
+                        <option value="UT">Utah</option>
+                        <option value="VT">Vermont</option>
+                        <option value="VA">Virginia</option>
+                        <option value="WA">Washington</option>
+                        <option value="WV">West Virginia</option>
+                        <option value="WI">Wisconsin</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="zipCode" class="required">ZIP Code</label>
+                    <input type="text" id="zipCode" name="zipCode" pattern="\d{5}(-\d{4})?" required>
+                </div>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="foreignAddress" name="foreignAddress">
+                <label for="foreignAddress">Check if you have a foreign address</label>
+            </div>
+        </div>
+        
+        <!-- Income Information -->
+        <div class="form-section">
+            <h2>Income Information</h2>
+            
+            <div class="two-column">
+                <div>
+                    <div class="form-group">
+                        <label for="wages">1. Wages, salaries, tips, etc.</label>
+                        <input type="number" id="wages" name="wages" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taxableInterest">2b. Taxable interest</label>
+                        <input type="number" id="taxableInterest" name="taxableInterest" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ordinaryDividends">3b. Ordinary dividends</label>
+                        <input type="number" id="ordinaryDividends" name="ordinaryDividends" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="iraDistributions">4b. IRA distributions (taxable amount)</label>
+                        <input type="number" id="iraDistributions" name="iraDistributions" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pensionsAnnuities">5b. Pensions and annuities (taxable amount)</label>
+                        <input type="number" id="pensionsAnnuities" name="pensionsAnnuities" min="0" step="1">
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="form-group">
+                        <label for="socialSecurityBenefits">6b. Social Security benefits (taxable amount)</label>
+                        <input type="number" id="socialSecurityBenefits" name="socialSecurityBenefits" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="capitalGains">7. Capital gain or (loss)</label>
+                        <input type="number" id="capitalGains" name="capitalGains" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="otherIncome">8. Other income</label>
+                        <input type="number" id="otherIncome" name="otherIncome" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="totalIncome">9. Total income (add lines 1, 2b, 3b, 4b, 5b, 6b, 7, and 8)</label>
+                        <input type="number" id="totalIncome" name="totalIncome" min="0" step="1" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Adjustments to Income -->
+        <div class="form-section">
+            <h2>Adjustments to Income</h2>
+            
+            <div class="two-column">
+                <div>
+                    <div class="form-group">
+                        <label for="educatorExpenses">10. Educator expenses</label>
+                        <input type="number" id="educatorExpenses" name="educatorExpenses" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="iraDeduction">11. IRA deduction</label>
+                        <input type="number" id="iraDeduction" name="iraDeduction" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentLoanInterest">12. Student loan interest deduction</label>
+                        <input type="number" id="studentLoanInterest" name="studentLoanInterest" min="0" step="1">
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="form-group">
+                        <label for="tuitionFees">13. Tuition and fees</label>
+                        <input type="number" id="tuitionFees" name="tuitionFees" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="totalAdjustments">14. Total adjustments (add lines 10 through 13)</label>
+                        <input type="number" id="totalAdjustments" name="totalAdjustments" min="0" step="1" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="adjustedGrossIncome">15. Adjusted gross income (line 9 minus line 14)</label>
+                        <input type="number" id="adjustedGrossIncome" name="adjustedGrossIncome" step="1" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tax and Credits -->
+        <div class="form-section">
+            <h2>Tax and Credits</h2>
+            
+            <div class="two-column">
+                <div>
+                    <div class="form-group">
+                        <label for="taxWithheld">17. Federal income tax withheld</label>
+                        <input type="number" id="taxWithheld" name="taxWithheld" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="earnedIncomeCredit">18. Earned income credit</label>
+                        <input type="number" id="earnedIncomeCredit" name="earnedIncomeCredit" min="0" step="1">
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="form-group">
+                        <label for="childTaxCredit">19. Child tax credit or credit for other dependents</label>
+                        <input type="number" id="childTaxCredit" name="childTaxCredit" min="0" step="1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="recoveryRebateCredit">20. Recovery rebate credit</label>
+                        <input type="number" id="recoveryRebateCredit" name="recoveryRebateCredit" min="0" step="1">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Payment Information -->
+        <div class="form-section">
+            <h2>Payment Information</h2>
+            
+            <div class="form-group">
+                <label for="routingNumber">Routing number (for direct deposit)</label>
+                <input type="text" id="routingNumber" name="routingNumber" pattern="\d{9}">
+            </div>
+            
+            <div class="form-group">
+                <label for="accountNumber">Account number (for direct deposit)</label>
+                <input type="text" id="accountNumber" name="accountNumber">
+            </div>
+            
+            <div class="form-group">
+                <label for="accountType">Account type</label>
+                <select id="accountType" name="accountType">
+                    <option value="">-- Select --</option>
+                    <option value="checking">Checking</option>
+                    <option value="savings">Savings</option>
+                </select>
+            </div>
+        </div>
+        
+        <button type="button" id="generatePdf">Generate 1040 Form</button>
+    </form>
+    
+    <script>
+        // Calculate totals when income values change
+        document.getElementById('wages').addEventListener('input', calculateTotals);
+        document.getElementById('taxableInterest').addEventListener('input', calculateTotals);
+        document.getElementById('ordinaryDividends').addEventListener('input', calculateTotals);
+        document.getElementById('iraDistributions').addEventListener('input', calculateTotals);
+        document.getElementById('pensionsAnnuities').addEventListener('input', calculateTotals);
+        document.getElementById('socialSecurityBenefits').addEventListener('input', calculateTotals);
+        document.getElementById('capitalGains').addEventListener('input', calculateTotals);
+        document.getElementById('otherIncome').addEventListener('input', calculateTotals);
+        
+        // Calculate adjustments when values change
+        document.getElementById('educatorExpenses').addEventListener('input', calculateAdjustments);
+        document.getElementById('iraDeduction').addEventListener('input', calculateAdjustments);
+        document.getElementById('studentLoanInterest').addEventListener('input', calculateAdjustments);
+        document.getElementById('tuitionFees').addEventListener('input', calculateAdjustments);
+        
+        function calculateTotals() {
+            const wages = parseFloat(document.getElementById('wages').value) || 0;
+            const taxableInterest = parseFloat(document.getElementById('taxableInterest').value) || 0;
+            const ordinaryDividends = parseFloat(document.getElementById('ordinaryDividends').value) || 0;
+            const iraDistributions = parseFloat(document.getElementById('iraDistributions').value) || 0;
+            const pensionsAnnuities = parseFloat(document.getElementById('pensionsAnnuities').value) || 0;
+            const socialSecurityBenefits = parseFloat(document.getElementById('socialSecurityBenefits').value) || 0;
+            const capitalGains = parseFloat(document.getElementById('capitalGains').value) || 0;
+            const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
+            
+            const totalIncome = wages + taxableInterest + ordinaryDividends + iraDistributions + 
+                               pensionsAnnuities + socialSecurityBenefits + capitalGains + otherIncome;
+            
+            document.getElementById('totalIncome').value = totalIncome.toFixed(2);
+            calculateAdjustedGrossIncome();
+        }
+        
+        function calculateAdjustments() {
+            const educatorExpenses = parseFloat(document.getElementById('educatorExpenses').value) || 0;
+            const iraDeduction = parseFloat(document.getElementById('iraDeduction').value) || 0;
+            const studentLoanInterest = parseFloat(document.getElementById('studentLoanInterest').value) || 0;
+            const tuitionFees = parseFloat(document.getElementById('tuitionFees').value) || 0;
+            
+            const totalAdjustments = educatorExpenses + iraDeduction + studentLoanInterest + tuitionFees;
+            
+            document.getElementById('totalAdjustments').value = totalAdjustments.toFixed(2);
+            calculateAdjustedGrossIncome();
+        }
+        
+        function calculateAdjustedGrossIncome() {
+            const totalIncome = parseFloat(document.getElementById('totalIncome').value) || 0;
+            const totalAdjustments = parseFloat(document.getElementById('totalAdjustments').value) || 0;
+            
+            const adjustedGrossIncome = totalIncome - totalAdjustments;
+            
+            document.getElementById('adjustedGrossIncome').value = adjustedGrossIncome.toFixed(2);
+        }
+        
+        // Generate PDF when button is clicked
+        document.getElementById('generatePdf').addEventListener('click', async function() {
+            // Validate form
+            const form = document.getElementById('taxForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // Collect form data
+            const formData = {
+                personalInfo: {
+                    firstName: document.getElementById('firstName').value,
+                    middleInitial: document.getElementById('middleInitial').value,
+                    lastName: document.getElementById('lastName').value,
+                    ssn: document.getElementById('ssn').value,
+                    dob: document.getElementById('dob').value,
+                    filingStatus: document.getElementById('filingStatus').value,
+                    spouseFiling: document.getElementById('spouseFiling').checked,
+                    dependent: document.getElementById('dependent').checked
+                },
+                address: {
+                    streetAddress: document.getElementById('streetAddress').value,
+                    aptNumber: document.getElementById('aptNumber').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value,
+                    zipCode: document.getElementById('zipCode').value,
+                    foreignAddress: document.getElementById('foreignAddress').checked
+                },
+                income: {
+                    wages: document.getElementById('wages').value,
+                    taxableInterest: document.getElementById('taxableInterest').value,
+                    ordinaryDividends: document.getElementById('ordinaryDividends').value,
+                    iraDistributions: document.getElementById('iraDistributions').value,
+                    pensionsAnnuities: document.getElementById('pensionsAnnuities').value,
+                    socialSecurityBenefits: document.getElementById('socialSecurityBenefits').value,
+                    capitalGains: document.getElementById('capitalGains').value,
+                    otherIncome: document.getElementById('otherIncome').value,
+                    totalIncome: document.getElementById('totalIncome').value
+                },
+                adjustments: {
+                    educatorExpenses: document.getElementById('educatorExpenses').value,
+                    iraDeduction: document.getElementById('iraDeduction').value,
+                    studentLoanInterest: document.getElementById('studentLoanInterest').value,
+                    tuitionFees: document.getElementById('tuitionFees').value,
+                    totalAdjustments: document.getElementById('totalAdjustments').value,
+                    adjustedGrossIncome: document.getElementById('adjustedGrossIncome').value
+                },
+                taxCredits: {
+                    taxWithheld: document.getElementById('taxWithheld').value,
+                    earnedIncomeCredit: document.getElementById('earnedIncomeCredit').value,
+                    childTaxCredit: document.getElementById('childTaxCredit').value,
+                    recoveryRebateCredit: document.getElementById('recoveryRebateCredit').value
+                },
+                payment: {
+                    routingNumber: document.getElementById('routingNumber').value,
+                    accountNumber: document.getElementById('accountNumber').value,
+                    accountType: document.getElementById('accountType').value
+                }
+            };
+            
+            // Show loading state
+            const button = document.getElementById('generatePdf');
+            const originalText = button.textContent;
+            button.textContent = 'Generating PDF...';
+            button.disabled = true;
+            
+            try {
+                // Load the blank 1040 form PDF
+                const formUrl = 'https://www.irs.gov/pub/irs-pdf/f1040.pdf'; // IRS official form
+                const formPdfBytes = await fetch(formUrl).then(res => res.arrayBuffer());
+                
+                // Load the PDF with pdf-lib
+                const { PDFDocument, rgb } = PDFLib;
+                const pdfDoc = await PDFDocument.load(formPdfBytes);
+                const formPdf = pdfDoc.getForm();
+                
+                // Fill out the form fields
+                // Personal Information
+                formPdf.getTextField('f1_001').setText(`${formData.personalInfo.lastName}, ${formData.personalInfo.firstName} ${formData.personalInfo.middleInitial}`);
+                formPdf.getTextField('f1_002').setText(formData.personalInfo.ssn);
+                
+                // Filing status
+                const filingStatusMapping = {
+                    'single': '1',
+                    'married_joint': '2',
+                    'married_separate': '3',
+                    'head_household': '4',
+                    'widower': '5'
+                };
+                formPdf.getRadioGroup('c1_001').select(filingStatusMapping[formData.personalInfo.filingStatus]);
+                
+                // Address
+                const addressLine1 = formData.address.aptNumber 
+                    ? `${formData.address.streetAddress}, ${formData.address.aptNumber}`
+                    : formData.address.streetAddress;
+                formPdf.getTextField('f1_003').setText(addressLine1);
+                formPdf.getTextField('f1_004').setText(`${formData.address.city}, ${formData.address.state} ${formData.address.zipCode}`);
+                
+                // Income
+                if (formData.income.wages) formPdf.getTextField('f1_005').setText(formData.income.wages);
+                if (formData.income.taxableInterest) formPdf.getTextField('f1_006').setText(formData.income.taxableInterest);
+                if (formData.income.ordinaryDividends) formPdf.getTextField('f1_007').setText(formData.income.ordinaryDividends);
+                if (formData.income.iraDistributions) formPdf.getTextField('f1_008').setText(formData.income.iraDistributions);
+                if (formData.income.pensionsAnnuities) formPdf.getTextField('f1_009').setText(formData.income.pensionsAnnuities);
+                if (formData.income.socialSecurityBenefits) formPdf.getTextField('f1_010').setText(formData.income.socialSecurityBenefits);
+                if (formData.income.capitalGains) formPdf.getTextField('f1_011').setText(formData.income.capitalGains);
+                if (formData.income.otherIncome) formPdf.getTextField('f1_012').setText(formData.income.otherIncome);
+                if (formData.income.totalIncome) formPdf.getTextField('f1_013').setText(formData.income.totalIncome);
+                
+                // Adjustments
+                if (formData.adjustments.educatorExpenses) formPdf.getTextField('f1_014').setText(formData.adjustments.educatorExpenses);
+                if (formData.adjustments.iraDeduction) formPdf.getTextField('f1_015').setText(formData.adjustments.iraDeduction);
+                if (formData.adjustments.studentLoanInterest) formPdf.getTextField('f1_016').setText(formData.adjustments.studentLoanInterest);
+                if (formData.adjustments.tuitionFees) formPdf.getTextField('f1_017').setText(formData.adjustments.tuitionFees);
+                if (formData.adjustments.totalAdjustments) formPdf.getTextField('f1_018').setText(formData.adjustments.totalAdjustments);
+                if (formData.adjustments.adjustedGrossIncome) formPdf.getTextField('f1_019').setText(formData.adjustments.adjustedGrossIncome);
+                
+                // Tax credits
+                if (formData.taxCredits.taxWithheld) formPdf.getTextField('f1_020').setText(formData.taxCredits.taxWithheld);
+                if (formData.taxCredits.earnedIncomeCredit) formPdf.getTextField('f1_021').setText(formData.taxCredits.earnedIncomeCredit);
+                if (formData.taxCredits.childTaxCredit) formPdf.getTextField('f1_022').setText(formData.taxCredits.childTaxCredit);
+                if (formData.taxCredits.recoveryRebateCredit) formPdf.getTextField('f1_023').setText(formData.taxCredits.recoveryRebateCredit);
+                
+                // Checkboxes
+                if (formData.personalInfo.spouseFiling) formPdf.getCheckBox('c1_002').check();
+                if (formData.personalInfo.dependent) formPdf.getCheckBox('c1_003').check();
+                if (formData.address.foreignAddress) formPdf.getCheckBox('c1_004').check();
+                
+                // Direct deposit info
+                if (formData.payment.routingNumber) formPdf.getTextField('f1_024').setText(formData.payment.routingNumber);
+                if (formData.payment.accountNumber) formPdf.getTextField('f1_025').setText(formData.payment.accountNumber);
+                if (formData.payment.accountType === 'checking') {
+                    formPdf.getCheckBox('c1_005').check();
+                } else if (formData.payment.accountType === 'savings') {
+                    formPdf.getCheckBox('c1_006').check();
+                }
+                
+                // Flatten the form to make it non-editable
+                formPdf.flatten();
+                
+                // Save the PDF
+                const pdfBytes = await pdfDoc.save();
+                
+                // Download the PDF
+                download(new Blob([pdfBytes], { type: 'application/pdf' }), 
+                        `1040-Form-${formData.personalInfo.lastName}-${new Date().getFullYear()}.pdf`);
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                alert('An error occurred while generating the PDF. Please try again.');
+            } finally {
+                // Restore button state
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
