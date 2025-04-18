@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JC‑TAX – W‑2 Form</title>
+
+  <!-- Bootstrap (CDN) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <style>
+    body{background:#c8ffd0;} .sidebar{background:#b8ffcc;min-height:100vh}
+    .jc-logo{color:#c9bb8e;font-size:2.5rem;font-weight:700}
+    .form-section{background:#dcffd5;border-radius:20px;padding:10px 15px;margin-bottom:20px}
+    .sidebar-item{background:#fff;border-radius:10px;padding:15px;margin:20px 0;text-align:center;font-weight:700}
+    .btn-save,.btn-clear{background:#0d6efd;color:#fff}
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- Sidebar -->
+      <div class="col-3 sidebar p-0">
+        <div class="p-3">
+          <div class="d-flex align-items-center mb-4">
+            <span class="jc-logo">JC</span>
+          </div>
+          <div class="sidebar-item">W‑2 FORM</div>
+          <div class="sidebar-item">CALCULATOR</div>
+          <div class="sidebar-item">SUBMIT TO IRS</div>
+        </div>
+      </div>
+
+      <!-- Main -->
+      <div class="col-9 pt-3">
+        <h1 class="ms-3">JC‑TAX</h1>
+        <div class="ps-3 pe-5">
+          <h2 class="text-center mb-4">W‑2 Form for 2025</h2>
+
+          <!-- ★ FORM ★ -->
+          <form id="w2Form">
+            <!-- Employee -->
+            <div class="form-section">
+              <h5 class="text-center mb-3">Employee Information</h5>
+              <input placeholder="Name"    name="employeeName"    class="form-control mb-2">
+              <input placeholder="SSN"     name="employeeSSN"     class="form-control mb-2">
+              <input placeholder="Address" name="employeeAddress" class="form-control mb-2">
+            </div>
+
+            <!-- Employer -->
+            <div class="form-section">
+              <h5 class="text-center mb-3">Employer Information</h5>
+              <input placeholder="Employer ID Number" name="employerId"      class="form-control mb-2">
+              <input placeholder="Employer Name"      name="employerName"    class="form-control mb-2">
+              <input placeholder="Employer Address"   name="employerAddress" class="form-control mb-2">
+            </div>
+
+            <!-- Wages & Taxes -->
+            <div class="form-section">
+              <h5 class="text-center mb-3">Wages, Taxes, Other Details</h5>
+              <input placeholder="Work Wages"                    name="workWages"     class="form-control mb-2">
+              <input placeholder="Federal Tax Withheld"          name="federalTax"    class="form-control mb-2">
+              <input placeholder="Social Security Wages"         name="ssWages"       class="form-control mb-2">
+              <input placeholder="Social Security Tax Withheld"  name="ssTax"         class="form-control mb-2">
+              <input placeholder="Medicare Wages & Tips"         name="medicareWages" class="form-control mb-2">
+              <input placeholder="Medicare Tax Withheld"         name="medicareTax"   class="form-control mb-2">
+              <input placeholder="State Tax Withheld"            name="stateTax"      class="form-control mb-2">
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex flex-column align-items-end mb-5">
+              <button type="submit" class="btn btn-save mb-3 w-25">Save</button>
+              <button type="reset"  class="btn btn-clear w-25">Clear</button>
+            </div>
+          </form>
+          <!-- ★ /FORM ★ -->
+
+          <div id="thanks" class="alert alert-success d-none"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Vanilla JS: serialize form → POST JSON → show thank‑you
+    document.getElementById('w2Form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target));
+      const res  = await fetch('/submit', {
+        method : 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body   : JSON.stringify(data)
+      });
+      const msg = await res.text();
+      e.target.reset();
+      const box = document.getElementById('thanks');
+      box.textContent = msg;
+      box.classList.remove('d-none');
+    });
+  </script>
+</body>
+</html>
