@@ -70,8 +70,8 @@
 
             <!-- Buttons -->
             <div class="d-flex flex-column align-items-end mb-5">
-              <button type="submit" class="btn btn-save mb-3 w-25">Save</button>
-              <button type="reset"  class="btn btn-clear w-25">Clear</button>
+              <a href="calculator.html" button type="save"  class="btn btn-save w-20">Save</button>
+              <a href="w2.html" button type="reset"  class="btn btn-clear w-20">Clear</button>
             </div>
           </form>
           <!-- ★ /FORM ★ -->
@@ -83,21 +83,26 @@
   </div>
 
   <script>
-    // Vanilla JS: serialize form → POST JSON → show thank‑you
     document.getElementById('w2Form').addEventListener('submit', async e => {
       e.preventDefault();
       const data = Object.fromEntries(new FormData(e.target));
-      const res  = await fetch('/submit', {
-        method : 'POST',
-        headers: { 'Content-Type':'application/json' },
-        body   : JSON.stringify(data)
+    
+      // ① send the data
+      await fetch('/submit', {
+        method  : 'POST',
+        headers : { 'Content-Type':'application/json' },
+        body    : JSON.stringify(data)
       });
-      const msg = await res.text();
+    
+      // ② reset form + show confirmation message
       e.target.reset();
       const box = document.getElementById('thanks');
-      box.textContent = msg;
+      box.textContent = 'Saved! Redirecting to calculator…';
       box.classList.remove('d-none');
+    
+      // ③ after a brief pause, go to the calculator
+      setTimeout(() => window.location.href = 'calculator.html', 1200);
     });
-  </script>
+    </script>
 </body>
 </html>
