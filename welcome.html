@@ -2,70 +2,96 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Welcome Page</title>
-  <link rel="stylesheet" href="WelStyle.css"
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JC‑TAX – Welcome</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+  <style>
+    :root{
+      --bg-main:#c8ffd0;
+      --sidebar:#b8ffcc;
+      --panel:#dcffd5;
+      --jc-gold:#c9bb8e;
+      --jc-blue:#0d6efd;
+    }
+    body{background:var(--bg-main);}
+    .sidebar{background:var(--sidebar);min-height:100vh}
+    .jc-logo{color:var(--jc-gold);font-size:2.5rem;font-weight:700}
+    .sidebar-item{background:#fff;border-radius:10px;padding:15px;margin:20px 0;text-align:center;font-weight:700}
+    .panel{background:var(--panel);border-radius:20px;padding:25px}
+    /* make primary buttons match the suite */
+    .btn-primary{background:var(--jc-blue);border:none;border-radius:20px;font-weight:700}
+    .btn-primary:hover{opacity:.9}
+  </style>
 </head>
 
 <body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-lg-3 sidebar p-0">
+        <div class="p-3">
+          <div class="d-flex align-items-center mb-4">
+            <span class="jc-logo">JC</span>
+          </div>
+          <a href="index.html"        class="sidebar-item d-block text-decoration-none text-dark">LOGIN / W‑2 FORM</a>
+          <a href="calculator.html"   class="sidebar-item d-block text-decoration-none text-dark">CALCULATOR</a>
+          <div class="sidebar-item">SUBMIT TO IRS</div>
+        </div>
+      </div>
 
+      <!-- Main -->
+      <div class="col-lg-9 p-4">
+        <h1 class="mb-4">Welcome to JC‑TAX</h1>
 
+        <div class="panel">
+          <p class="lead">We’re happy to have you here. Choose an option from the sidebar to get started, or explore below.</p>
 
-  <div class="toolbox">
-      <h1>JC-Tax</h1>
+          <!-- Explore button -->
+          <div class="d-flex justify-content-center mt-3 mb-4">
+            <a href="index.html" class="btn btn-primary btn-lg px-5">
+              Explore JC‑TAX
+            </a>
+          </div>
+
+          <table class="table table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th>Submission Date</th>
+                <th>Form</th>
+                <th>Status</th>
+                <th>Approved Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>04/11/25</td>
+                <td>W‑2 Form</td>
+                <td>In Queue</td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>02/11/24</td>
+                <td>W‑2 Form</td>
+                <td>Submitted</td>
+                <td>03/01/24</td>
+              </tr>
+              <tr>
+                <td>02/11/23</td>
+                <td>W‑2 Form</td>
+                <td>Submitted</td>
+                <td>03/01/23</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="side-strip"></div>
-
-  <div class="button-container">
-    <a href="w2.html">
-      <button class="side-button">W2 FORMS</button>
-    </a>
-    <a href="calculator.html">
-      <button class="side-button">CALCULATOR</button>
-    </a>
-    <button class="side-button">IRS Submission</button>
-  </div>
-
-  <div class="white-box">
-    <p>Welcome to our website! We are happy to have you here.</p>
-    <p>This is a body of text inside the white box. You can add more content here as you like.</p>
-    <p>Feel free to explore and discover more about what we offer.</p>
-
-    <table class="info-table">
-        <thead>
-          <tr>
-            <th>Submission Date</th>
-            <th>Form</th>
-            <th>Status</th>
-            <th>Approved Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>4/11/25</td>
-            <td>W2 form</td>
-            <td>In Queue</td>
-            <td>N/A</td>
-          </tr>
-          <tr>
-            <td>2/11/24</td>
-            <td>W2 Form</td>
-            <td>Submitted</td>
-            <td>3/1/24</td>
-          </tr>
-          <tr>
-            <td>2/11/23</td>
-            <td>W2 Form</td>
-            <td>Submitted</td>
-            <td>3/1/23</td>
-          </tr>
-        </tbody>
-      </table>
-
-  </div>
-
-
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
