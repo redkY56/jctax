@@ -69,15 +69,11 @@
 
     <script>
         document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            
-            // Get input values
-            let username = document.getElementById("username").value;
-            let password = document.getElementById("password").value;
+            event.preventDefault();           // keep the page from reloading
+            /* (optional) do any client‑side validation here */
 
-            // Display values (for demonstration, log to console)
-            console.log("Username:", username);
-            console.log("Password:", password);
+            // ⭐ Redirect to w2.html
+            window.location.href = "w2.html";
         });
     </script>
 
