@@ -1,0 +1,7 @@
+"doc_id";"return_ID";"doc_type";"file_path";"datetime";"status"
+"data_id";"return_id";"total_income";"total_expenses";"data_source";"processed_at"
+"submission_id";"return_ID";"submission_method";"submitted_at";"confirmation_num";"status"
+"calc_id";"return_ID";"fed_tax_owed";"state_tax_owed";"total_deductions";"final_amt";"calculated_amt"
+"return_ID";"User_ID";"tax_year";"status";"submitted_at";"submission_type";"is_complete"
+"user_id";"email";"name"
+"w2_id";"return_ID";"employer_ein";"wages";"fed_tax_withheld";"state_tax_withheld";"tax_year"
