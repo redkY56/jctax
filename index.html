@@ -1,82 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #ffffff;
-            position: relative;
-        }
-        .login-container {
-            background-color: #b2ffb2;
-            padding: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 40%;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .login-box {
-            flex: 1;
-            text-align: center;
-        }
-        .logo {
-            font-size: 80px;
-            font-weight: bold;
-            color: #c49a4a;
-            position: absolute;
-            right: 10%;
-            top: 40%;
-        }
-        .form-control {
-            margin-bottom: 15px;
-            border-radius: 20px;
-        }
-        .btn-login {
-            width: 100%;
-            border-radius: 20px;
-            background-color: #0d6efd;
-            color: white;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login – JC‑TAX</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #ffffff;
+      position: relative;
+    }
+    .login-container {
+      background-color: #b2ffb2;
+      padding: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 40%;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .login-box {
+      flex: 1;
+      text-align: center;
+    }
+    .logo {
+      font-size: 80px;
+      font-weight: bold;
+      color: #c49a4a;
+      position: absolute;
+      right: 10%;
+      top: 40%;
+    }
+    .form-control {
+      margin-bottom: 15px;
+      border-radius: 20px;
+    }
+    .btn-login {
+      width: 100%;
+      border-radius: 20px;
+      background-color: #0d6efd;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-
-    <div class="login-container shadow">
-        <div class="login-box">
-            <h2 class="fw-bold">LOGIN</h2>
-            <form id="loginForm">
-                <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
-                <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
-                <button type="submit" class="btn btn-login">Login</button>
-            </form>
-        </div>
+  <div class="login-container shadow">
+    <div class="login-box">
+      <h2 class="fw-bold">LOGIN</h2>
+      <form method="POST" action="save_user.php"> <!-- please don't modify this line -->
+        <input type="email" name="email" class="form-control" placeholder="Enter your email" required /> <!-- please don't modify this line -->
+        <input type="text" name="name" class="form-control" placeholder="Enter your full name" required /> <!-- please don't modify this line -->
+        <input type="password" name="password" class="form-control" placeholder="Enter a password" required /> <!-- please don't modify this line -->
+        <button type="submit" class="btn btn-login">Continue</button> <!-- please don't modify this line -->
+      </form>
     </div>
+  </div>
 
-    <!-- JC Logo (Outside the Green Box) -->
-    <div class="logo">
-        JC
-    </div>
+  <div class="logo">JC</div>
 
-    <script>
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();           // keep the page from reloading
-            /* (optional) do any client‑side validation here */
-
-            // ⭐ Redirect to w2.html
-            window.location.href = "w2.html";
-        });
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
