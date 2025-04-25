@@ -1,119 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JC‑TAX – W‑2 Form</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JC‑TAX – W‑2 Input</title>
 
+  <!-- Bootstrap CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-  <!-- Bootstrap (CDN) -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
   <style>
-    
-    body{background:#c8ffd0;} .sidebar{background:#b8ffcc;min-height:100vh}
-    .jc-logo{color:#c9bb8e;font-size:2.5rem;font-weight:700}
-    .form-section{background:#dcffd5;border-radius:20px;padding:10px 15px;margin-bottom:20px}
-    .sidebar-item{background:#fff;border-radius:10px;padding:15px;margin:20px 0;text-align:center;font-weight:700}
-    .btn-save,.btn-clear{background:#0d6efd;color:#fff}
-    .jc-logo {
-      color: #c9bb8e;
-      font-size: 2.5rem;
+    :root {
+      --bg-main:#c8ffd0;
+      --sidebar:#b8ffcc;
+      --panel:#dcffd5;
+      --jc-gold:#c9bb8e;
+      --jc-blue:#0d6efd;
+    }
+    body { background: var(--bg-main); }
+
+    /* Sidebar */
+    .sidebar { background: var(--sidebar); min-height: 100vh; }
+    .jc-logo { color: var(--jc-gold); font-size: 2.5rem; font-weight: 700; }
+    .sidebar-item {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px 0;
+      text-align: center;
       font-weight: 700;
     }
 
+    /* Main panel */
+    .panel {
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 25px;
+    }
+
+    .form-section {
+      background: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 4px rgba(0,0,0,.08);
+    }
+
+    .form-control {
+      border-radius: 10px;
+    }
+
+    .btn-submit {
+      background-color: var(--jc-blue);
+      color: white;
+      font-weight: 700;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.95;
+    }
   </style>
 </head>
+
 <body>
   <div class="container-fluid">
     <div class="row">
-
       <!-- Sidebar -->
-      <div class="col-3 sidebar p-0">
+      <div class="col-lg-3 sidebar p-0">
         <div class="p-3">
           <div class="d-flex align-items-center mb-4">
-            <a href="Wel.html" class="jc-logo text-decoration-none">JC</a>
-           <!--<span class="jc-logo">JC</span> -->
+            <span class="jc-logo">JC</span>
           </div>
-          <div class="sidebar-item">W‑2 FORM</div>
-          <div class="sidebar-item">
-            <a href="calculator.html"   class="text-decoration-none text-dark">CALCULATOR</a>
-          </div>
+          <a href="w2.html" class="sidebar-item d-block text-decoration-none text-dark">W‑2 FORM</a>
+          <a href="calculator.html" class="sidebar-item d-block text-decoration-none text-dark">CALCULATOR</a>
           <div class="sidebar-item">SUBMIT TO IRS</div>
         </div>
       </div>
 
-      <!-- Main -->
-      <div class="col-9 pt-3">
-        <h1 class="ms-3">JC‑TAX</h1>
-        <div class="ps-3 pe-5">
-          <h2 class="text-center mb-4">W‑2 Form for 2025</h2>
-
-          <!-- ★ FORM ★ -->
-          <form id="w2Form">
-            <!-- Employee -->
-            <div class="form-section">
-              <h5 class="text-center mb-3">Employee Information</h5>
-              <input placeholder="Name"    name="employeeName"    class="form-control mb-2">
-              <input placeholder="SSN"     name="employeeSSN"     class="form-control mb-2">
-              <input placeholder="Address" name="employeeAddress" class="form-control mb-2">
+      <!-- Main Panel -->
+      <div class="col-lg-9 p-4">
+        <h1 class="mb-4">JC‑TAX — W‑2 & Financial Details</h1>
+        <form method="POST" action="save_w2.php" class="panel">
+          <div class="form-section">
+            <h2>W‑2 Form Details</h2>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Employer EIN</label>
+                <input name="employer_ein" class="form-control" placeholder="Employer EIN" required />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Wages</label>
+                <input name="wages" class="form-control" type="number" step="0.01" required />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Federal Tax Withheld</label>
+                <input name="fed_tax_withheld" class="form-control" type="number" step="0.01" required />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">State Tax Withheld</label>
+                <input name="state_tax_withheld" class="form-control" type="number" step="0.01" required />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Tax Year</label>
+                <input name="tax_year" class="form-control" type="number" value="2025" required />
+              </div>
             </div>
+          </div>
 
-            <!-- Employer -->
-            <div class="form-section">
-              <h5 class="text-center mb-3">Employer Information</h5>
-              <input placeholder="Employer ID Number" name="employerId"      class="form-control mb-2">
-              <input placeholder="Employer Name"      name="employerName"    class="form-control mb-2">
-              <input placeholder="Employer Address"   name="employerAddress" class="form-control mb-2">
+          <div class="form-section">
+            <h2>Financial Summary</h2>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Total Income</label>
+                <input name="total_income" class="form-control" type="number" step="0.01" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Total Expenses</label>
+                <input name="total_expenses" class="form-control" type="number" step="0.01" required />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-bold">Data Source</label>
+                <input name="data_source" class="form-control" placeholder="e.g., W‑2 Form" required />
+              </div>
             </div>
+          </div>
 
-            <!-- Wages & Taxes -->
-            <div class="form-section">
-              <h5 class="text-center mb-3">Wages, Taxes, Other Details</h5>
-              <input placeholder="Work Wages"                    name="workWages"     class="form-control mb-2">
-              <input placeholder="Federal Tax Withheld"          name="federalTax"    class="form-control mb-2">
-              <input placeholder="Social Security Wages"         name="ssWages"       class="form-control mb-2">
-              <input placeholder="Social Security Tax Withheld"  name="ssTax"         class="form-control mb-2">
-              <input placeholder="Medicare Wages & Tips"         name="medicareWages" class="form-control mb-2">
-              <input placeholder="Medicare Tax Withheld"         name="medicareTax"   class="form-control mb-2">
-              <input placeholder="State Tax Withheld"            name="stateTax"      class="form-control mb-2">
-            </div>
-
-            <!-- Buttons -->
-            <div class="d-flex flex-column align-items-end mb-5">
-              <a href="calculator.html" button type="save"  class="btn btn-save w-20">Save</button>
-              <a href="w2.html" button type="reset"  class="btn btn-clear w-20">Clear</button>
-            </div>
-          </form>
-          <!-- ★ /FORM ★ -->
-
-          <div id="thanks" class="alert alert-success d-none"></div>
-        </div>
+          <button type="submit" class="btn btn-submit w-100 mt-3">Save & Continue</button>
+        </form>
       </div>
     </div>
   </div>
-
-  <script>
-    document.getElementById('w2Form').addEventListener('submit', async e => {
-      e.preventDefault();
-      const data = Object.fromEntries(new FormData(e.target));
-    
-      // ① send the data
-      await fetch('/submit', {
-        method  : 'POST',
-        headers : { 'Content-Type':'application/json' },
-        body    : JSON.stringify(data)
-      });
-    
-      // ② reset form + show confirmation message
-      e.target.reset();
-      const box = document.getElementById('thanks');
-      box.textContent = 'Saved! Redirecting to calculator…';
-      box.classList.remove('d-none');
-    
-      // ③ after a brief pause, go to the calculator
-      setTimeout(() => window.location.href = 'calculator.html', 1200);
-    });
-    </script>
 </body>
 </html>
