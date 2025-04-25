@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JC‑TAX – Submition to IRS</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+
+  <style>
+    :root{
+      --bg-main:#c8ffd0;
+      --sidebar:#b8ffcc;
+      --panel:#dcffd5;
+      --jc-gold:#c9bb8e;
+      --jc-blue:#0d6efd;
+    }
+    body{background:var(--bg-main);}
+    .sidebar{background:var(--sidebar);min-height:100vh}
+    .jc-logo{color:var(--jc-gold);font-size:2.5rem;font-weight:700}
+    .sidebar-item{background:#fff;border-radius:10px;padding:15px;margin:20px 0;text-align:center;font-weight:700}
+    .panel{background:var(--panel);border-radius:20px;padding:25px}
+    /* make primary buttons match the suite */
+    .btn-save,.btn-clear{background:#0d6efd;color:#fff}
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-lg-3 sidebar p-0">
+        <div class="p-3">
+          <div class="d-flex align-items-center mb-4">
+            <a href="Wel.html" class="jc-logo text-decoration-none">JC</a>
+          </div>
+          <a href="w2.html"        class="sidebar-item d-block text-decoration-none text-dark">W‑2 FORM</a>
+          <a href="calculator.html"   class="sidebar-item d-block text-decoration-none text-dark">CALCULATOR</a>
+          <div class="sidebar-item">SUBMIT TO IRS</div>
+        </div>
+      </div>
+
+<!-- Main -->
+<div class="col-lg-9 p-4">
+    <h1 class="mb-4">JC‑TAX IRS Submission</h1>
+  
+    <div class="panel">
+      <p class="lead">Review your IRS Information, make sure everything is correct. Once you are done reviewing please choose how you want to submit your IRS Form.</p>
+      <!--Here should be where the PDF is placed.-->
+      <h1> YOUR IRS FORM</h1>
+    </div>
+  
+    <!--  -->
+    <div class="d-flex flex-column align-items-end mt-4">
+      <button type="button" class="btn btn-save mb-2 w-auto" >Virtual Submission</button>
+      <button type="button" class="btn btn-clear w-auto" >Download Form</button>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
