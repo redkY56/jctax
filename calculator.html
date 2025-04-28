@@ -1,298 +1,129 @@
+<?php
+require 'config.php';
+session_start();
+
+// Fetch calculation if return_id is passed
+$calculation = null;
+
+if (isset($_GET['return_id'])) {
+    $return_ID = intval($_GET['return_id']);
+
+    $stmt = $pdo->prepare("SELECT * FROM tax_calculation WHERE return_ID = ? ORDER BY calc_id DESC LIMIT 1");
+    $stmt->execute([$return_ID]);
+    $calculation = $stmt->fetch();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>JC‑TAX – 1040 Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JC‑TAX – Calculator</title>
 
-  <!-- Bootstrap (CDN) -->
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
-
-  <!-- pdf‑lib + download.js (unchanged) -->
-  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-  <script src="https://unpkg.com/downloadjs@1.4.7"></script>
-
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
-    /* Shared JC‑TAX palette */
-    :root{
+    :root {
       --bg-main:#c8ffd0;
       --sidebar:#b8ffcc;
       --panel:#dcffd5;
       --jc-gold:#c9bb8e;
       --jc-blue:#0d6efd;
     }
-    body{background:var(--bg-main);}
-    /* Sidebar */
-    .sidebar{background:var(--sidebar);min-height:100vh}
-    .jc-logo{color:var(--jc-gold);font-size:2.5rem;font-weight:700}
-    .sidebar-item{background:#fff;border-radius:10px;padding:15px;margin:20px 0;text-align:center;font-weight:700}
-    /* Main panel + form cards */
-    .panel{background:var(--panel);border-radius:20px;padding:25px}
-    .form-section{background:#fff;border-radius:15px;padding:20px;margin-bottom:25px;box-shadow:0 2px 4px rgba(0,0,0,.08)}
-    .form-section h2{font-size:1.2rem;margin-bottom:1rem}
-    /* Inputs & buttons */
-    .form-control,select{border-radius:10px}
-    .btn-primary{background:var(--jc-blue);border:none;border-radius:20px;font-weight:700}
-    .btn-primary:hover{opacity:.9}
+    body { background: var(--bg-main); }
+
+    .sidebar {
+      background: var(--sidebar);
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .sidebar-item {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .jc-logo {
+      color: var(--jc-gold);
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .panel {
+      background: var(--panel);
+      padding: 30px;
+      border-radius: 20px;
+    }
+    .btn-submit, .btn-previous {
+      border-radius: 20px;
+      font-weight: bold;
+      width: 100%;
+    }
+    .btn-submit {
+      background-color: var(--jc-blue);
+      color: white;
+    }
+    .btn-previous {
+      background-color: grey;
+      color: white;
+    }
   </style>
 </head>
-
 <body>
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Sidebar -->
-      <div class="col-lg-3 sidebar p-0">
-        <div class="p-3">
-          <div class="d-flex align-items-center mb-4">
-            <a href="Wel.html" class="jc-logo text-decoration-none">JC</a>
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar -->
+    <div class="col-3 sidebar">
+      <div class="d-flex flex-column align-items-center mb-4">
+        <a href="welcome.html" class="jc-logo">JC</a>
+      </div>
+      <a href="w2.html" class="sidebar-item d-block text-decoration-none text-dark">W‑2 Form</a>
+      <a href="calculator.php" class="sidebar-item d-block text-decoration-none text-dark">Calculator</a>
+      <a href="IRSsub.html"   class="sidebar-item d-block text-decoration-none text-dark">SUBMIT TO IRS</a>
+      </div>
+
+    <!-- Main Content -->
+    <div class="col-9 p-4">
+      <h1>JC‑TAX Calculator</h1>
+
+      <?php if ($calculation): ?>
+        <div class="alert alert-success" role="alert">
+          Tax calculation completed successfully!
+        </div>
+
+        <div class="panel mt-4">
+          <h4 class="text-center mb-4">Calculation Results</h4>
+          <ul class="list-group mb-4">
+            <li class="list-group-item"><strong>Federal Tax Owed:</strong> $<?php echo number_format($calculation['fed_tax_owed'], 2); ?></li>
+            <li class="list-group-item"><strong>State Tax Owed:</strong> $<?php echo number_format($calculation['state_tax_owed'], 2); ?></li>
+            <li class="list-group-item"><strong>Total Deductions:</strong> $<?php echo number_format($calculation['total_deductions'], 2); ?></li>
+            <li class="list-group-item"><strong>Calculated Amount:</strong> $<?php echo number_format($calculation['calculated_amt'], 2); ?></li>
+            <li class="list-group-item"><strong>Final Amount (After Deductions):</strong> $<?php echo number_format($calculation['final_amt'], 2); ?></li>
+          </ul>
+        </div>
+      <?php else: ?>
+        <div class="alert alert-warning" role="alert">
+          No calculation found. Please complete your W‑2 form first.
+        </div>
+      <?php endif; ?>
+
+      <!-- Navigation Buttons -->
+      <div class="panel mt-4">
+        <div class="row">
+          <div class="col-md-6">
+            <a href="w2.html" class="btn btn-previous">Previous</a>
           </div>
-          <a href="w2.html"        class="sidebar-item d-block text-decoration-none text-dark">W‑2 FORM</a>
-          <a href="calculator.html" class="sidebar-item d-block text-decoration-none text-dark">CALCULATOR</a>
-          <div class="sidebar-item">
-            <a href="IRSsub.html"   class=" text-decoration-none text-dark">SUBMIT TO IRS</a>
+          <div class="col-md-6">
+            <a href="IRSsub.html" class="btn btn-submit">Next</a>
           </div>
         </div>
       </div>
 
-      <!-- Main content -->
-      <div class="col-lg-9 p-4">
-        <h1 class="mb-4">JC‑TAX — 1040 Tax Form Generator</h1>
-
-        <form id="taxForm" class="panel">
-          <!-- Personal Information -->
-          <div class="form-section">
-            <h2>Personal Information</h2>
-            <div class="row g-3">
-              <div class="col-md-4">
-                <label class="form-label fw-bold">First Name *</label>
-                <input type="text" id="firstName" name="firstName" class="form-control" required>
-              </div>
-              <div class="col-md-2">
-                <label class="form-label fw-bold">Middle Initial</label>
-                <input type="text" id="middleInitial" name="middleInitial" maxlength="1" class="form-control">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Last Name *</label>
-                <input type="text" id="lastName" name="lastName" class="form-control" required>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold">SSN *</label>
-                <input type="text" id="ssn" name="ssn" pattern="\d{3}-\d{2}-\d{4}" placeholder="XXX‑XX‑XXXX" class="form-control" required>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold">Date of Birth *</label>
-                <input type="date" id="dob" name="dob" class="form-control" required>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold">Filing Status *</label>
-                <select id="filingStatus" name="filingStatus" class="form-select" required>
-                  <option value="">— Select —</option>
-                  <option value="single">Single</option>
-                  <option value="married_joint">Married Filing Jointly</option>
-                  <option value="married_separate">Married Filing Separately</option>
-                  <option value="head_household">Head of Household</option>
-                  <option value="widower">Qualifying Widow(er)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Address Information -->
-          <div class="form-section">
-            <h2>Address</h2>
-            <div class="row g-3">
-              <div class="col-md-8">
-                <label class="form-label fw-bold">Street Address *</label>
-                <input type="text" id="streetAddress" name="streetAddress" class="form-control" required>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold">Apt / Suite</label>
-                <input type="text" id="aptNumber" name="aptNumber" class="form-control">
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold">City *</label>
-                <input type="text" id="city" name="city" class="form-control" required>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold">State *</label>
-                <select id="state" name="state" class="form-select" required>
-                  <!-- abbreviated list for brevity -->
-                  <option value="">— Select —</option><option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option><option value="CA">California</option> <!-- … -->
-                </select>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold">ZIP Code *</label>
-                <input type="text" id="zipCode" name="zipCode" pattern="\d{5}(-\d{4})?" class="form-control" required>
-              </div>
-            </div>
-          </div>
-
-          <!-- Income (two‑column layout) -->
-          <div class="form-section">
-            <h2>Income</h2>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">Wages, salaries, tips</label>
-                <input type="number" id="wages" name="wages" min="0" step="1" class="form-control">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Taxable interest</label>
-                <input type="number" id="taxableInterest" name="taxableInterest" min="0" step="1" class="form-control">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Ordinary dividends</label>
-                <input type="number" id="ordinaryDividends" name="ordinaryDividends" min="0" step="1" class="form-control">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Capital gain / (loss)</label>
-                <input type="number" id="capitalGains" name="capitalGains" step="1" class="form-control">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Other income</label>
-                <input type="number" id="otherIncome" name="otherIncome" min="0" step="1" class="form-control">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Total income</label>
-                <input type="number" id="totalIncome" name="totalIncome" readonly class="form-control">
-              </div>
-            </div>
-          </div>
-
-          <!-- Adjustments -->
-          <div class="form-section">
-            <h2>Adjustments / Deductions</h2>
-            <div class="row g-3">
-              <div class="col-md-3">
-                <label class="form-label">Educator expenses</label>
-                <input type="number" id="educatorExpenses" name="educatorExpenses" min="0" step="1" class="form-control">
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">IRA deduction</label>
-                <input type="number" id="iraDeduction" name="iraDeduction" min="0" step="1" class="form-control">
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">Student loan interest</label>
-                <input type="number" id="studentLoanInterest" name="studentLoanInterest" min="0" step="1" class="form-control">
-              </div>
-              <div class="col-md-3">
-                <label class="form-label">Tuition & fees</label>
-                <input type="number" id="tuitionFees" name="tuitionFees" min="0" step="1" class="form-control">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Total adjustments</label>
-                <input type="number" id="totalAdjustments" name="totalAdjustments" readonly class="form-control">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Adjusted gross income</label>
-                <input type="number" id="adjustedGrossIncome" name="adjustedGrossIncome" readonly class="form-control">
-              </div>
-            </div>
-          </div>
-
-          <!-- Payments & Credits -->
-          <div class="form-section">
-            <h2>Tax Payments & Credits</h2>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">Federal income tax withheld</label>
-                <input type="number" id="taxWithheld" name="taxWithheld" min="0" step="1" class="form-control">
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Earned income credit</label>
-                <input type="number" id="earnedIncomeCredit" name="earnedIncomeCredit" min="0" step="1" class="form-control">
-              </div>
-            </div>
-          </div>
-
-          <!-- Direct deposit -->
-          <div class="form-section">
-            <h2>Direct Deposit</h2>
-            <div class="row g-3">
-              <div class="col-md-4">
-                <label class="form-label">Routing number</label>
-                <input type="text" id="routingNumber" name="routingNumber" pattern="\d{9}" class="form-control">
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">Account number</label>
-                <input type="text" id="accountNumber" name="accountNumber" class="form-control">
-              </div>
-              <div class="col-md-4">
-                <label class="form-label">Account type</label>
-                <select id="accountType" name="accountType" class="form-select">
-                  <option value="">— Select —</option>
-                  <option value="checking">Checking</option>
-                  <option value="savings">Savings</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Generate button -->
-          <button type="button" id="generatePdf" class="btn btn-primary w-100 py-2" onclick="window.location.href='IRSsub.html';">
-            Generate 1040 PDF
-          </button>
-        </form>
-      </div>
     </div>
   </div>
-
-  <!-- === JS (keeps your original logic) === -->
-  <script>
-    /* --------- auto‑calculations -------- */
-    const incomeFields = ['wages','taxableInterest','ordinaryDividends','capitalGains','otherIncome'];
-    incomeFields.forEach(id=>document.getElementById(id).addEventListener('input',calcTotals));
-
-    const adjFields=['educatorExpenses','iraDeduction','studentLoanInterest','tuitionFees'];
-    adjFields.forEach(id=>document.getElementById(id).addEventListener('input',calcAdjust));
-
-    function calcTotals(){
-      const t = incomeFields.reduce((s,id)=>s+(+document.getElementById(id).value||0),0);
-      document.getElementById('totalIncome').value=t.toFixed(2);
-      calcAGI();
-    }
-    function calcAdjust(){
-      const a = adjFields.reduce((s,id)=>s+(+document.getElementById(id).value||0),0);
-      document.getElementById('totalAdjustments').value=a.toFixed(2);
-      calcAGI();
-    }
-    function calcAGI(){
-      const ti = +document.getElementById('totalIncome').value||0;
-      const ta = +document.getElementById('totalAdjustments').value||0;
-      document.getElementById('adjustedGrossIncome').value=(ti-ta).toFixed(2);
-    }
-
-    /* --------- PDF generation (unchanged) -------- */
-    document.getElementById('generatePdf').addEventListener('click',async()=>{
-      const form=document.getElementById('taxForm');
-      if(!form.checkValidity()){form.reportValidity();return;}
-
-      const btn=document.getElementById('generatePdf');
-      const txt=btn.textContent;
-      btn.textContent='Generating…';btn.disabled=true;
-
-      try{
-        // collect data (trimmed for brevity)
-        const fd = Object.fromEntries(new FormData(form));
-
-        // load IRS blank PDF
-        const bytes = await fetch('https://www.irs.gov/pub/irs-pdf/f1040.pdf').then(r=>r.arrayBuffer());
-        const {PDFDocument}=PDFLib;
-        const pdfDoc=await PDFDocument.load(bytes);
-        const formPdf=pdfDoc.getForm();
-
-        // example field (add the rest as you wish)
-        formPdf.getTextField('f1_001').setText(`${fd.lastName}, ${fd.firstName} ${fd.middleInitial||''}`);
-        /* … populate other fields like your original script … */
-
-        formPdf.flatten();
-        const out=await pdfDoc.save();
-        download(new Blob([out],{type:'application/pdf'}),
-                 `1040-${fd.lastName}-${new Date().getFullYear()}.pdf`);
-      }catch(err){console.error(err);alert('Error creating PDF');}
-      finally{btn.textContent=txt;btn.disabled=false;}
-    });
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</div>
 </body>
 </html>
+
